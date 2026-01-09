@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rafu's Birthday! 🎉</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .animate-sparkle {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .birthday-card {
+            perspective: 1000px;
+        }
+
+        .birthday-card:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+        }
+
+        .photo-item {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .photo-item.hidden {
+            display: none;
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: confetti 3s ease-in forwards;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 40px rgba(168, 85, 247, 0.8);
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .animate-heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        @keyframes float-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-float-up {
+            animation: float-up 0.6s ease-out;
+        }
+
+        /* Delete Modal Styles */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 400px;
+            width: 90%;
+            margin: 1rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease-out;
+        }
+
+        .modal-backdrop.active .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        @media (min-width: 640px) {
+            .modal-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen smooth-scroll">
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-backdrop">
+        <div class="modal-content">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3 sm:mb-4">Delete Comment?</h3>
+            <p class="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Are you sure you want to delete this comment?
+                This action cannot be undone.</p>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 sm:justify-end">
+                <button id="cancelDelete"
+                    class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-400 transition-colors order-2 sm:order-1">
+                    Cancel
+                </button>
+                <button id="confirmDelete"
+                    class="w-full sm:w-auto px-4 sm:px-6 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors order-1 sm:order-2">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Navigation Header -->
+    <nav class="fixed top-0 left-0 right-0 bg-white bg-opacity-95 shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold gradient-text">Rafu's Birthday 🎂</h1>
+            <div class="hidden md:flex gap-6">
+                <a href="#carousel" class="text-purple-600 hover:text-pink-600 transition">Gallery</a>
+                <a href="#cards" class="text-purple-600 hover:text-pink-600 transition">Wishes</a>
+                <a href="#timeline" class="text-purple-600 hover:text-pink-600 transition">Memories</a>
+                <a href="#messages" class="text-purple-600 hover:text-pink-600 transition">Messages</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Balloons decoration -->
+    <div class="fixed top-16 left-0 right-0 pointer-events-none overflow-hidden h-32 z-[-10000]">
+        <div class="absolute top-5 left-10 w-6 h-8 bg-red-500 rounded-full animate-float" style="animation-delay: 0s;">
+        </div>
+        <div class="absolute top-10 left-32 w-6 h-8 bg-yellow-400 rounded-full animate-float"
+            style="animation-delay: 0.5s;"></div>
+        <div class="absolute top-3 right-20 w-6 h-8 bg-pink-500 rounded-full animate-float"
+            style="animation-delay: 1s;"></div>
+        <div class="absolute top-12 right-40 w-6 h-8 bg-blue-400 rounded-full animate-float"
+            style="animation-delay: 1.5s;"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8 pt-24">
+        <!-- Hero Section -->
+        <div class="text-center mb-12 animate-slide-in">
+            <h1 class="text-4xl md:text-6xl font-bold text-purple-600 mb-2">
+                Happy Birthday
+            </h1>
+            <h2 class="text-5xl md:text-7xl font-black text-pink-600 mb-4">
+                Rafu Baby! 🎉
+            </h2>
+            <p class="text-lg md:text-2xl text-purple-500 font-semibold mb-6">
+                Wishing you a very lovely day for my wify filled with love, laughter, and happiness
+            </p>
+            <!-- Birthday Age Display -->
+            <div class="inline-block bg-white rounded-3xl shadow-lg px-8 py-4 mb-6">
+                <div class="text-center">
+                    <p class="text-lg text-gray-600 mb-2">Born: <span class="font-bold text-purple-600">13 August
+                            2006</span></p>
+                    <p
+                        class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
+                        My baby turned 20 Today! 🎂
+                    </p>
+                    <div class="mt-3 pt-3 border-t-2 border-purple-200">
+                        <p class="text-lg text-gray-500">My little baby is growing<span
+                                class="text-xl font-bold text-pink-600"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Carousel Section -->
+        <div class="w-full max-w-2xl mb-12 animate-slide-in" style="animation-delay: 0.2s;" id="carousel">
+            <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                <div
+                    class="photo-carousel h-96 md:h-[32rem] lg:h-[36rem] bg-gray-200 flex items-center justify-center relative">
+                    <!-- Previous Button -->
+                    <button id="prevBtn"
+                        class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 rounded-full p-2 sm:p-3 shadow-lg transition-all hover:scale-110 z-10">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Next Button -->
+                    <button id="nextBtn"
+                        class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 rounded-full p-2 sm:p-3 shadow-lg transition-all hover:scale-110 z-10">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Photo 1 -->
+                    <div class="photo-item w-full h-full">
+                        <img src="Images/Pic15.jpg" alt="Photo 1" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/E879F9/FFFFFF?text=Photo+1'">
+                    </div>
+
+                    <!-- Photo 2 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic14.jpg" alt="Photo 2" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/EC4899/FFFFFF?text=Photo+2'">
+                    </div>
+
+                    <!-- Photo 3 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic13.jpg" alt="Photo 3" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/FBBF24/FFFFFF?text=Photo+3'">
+                    </div>
+
+                    <!-- Photo 4 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic12.jpg" alt="Photo 4" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/10B981/FFFFFF?text=Photo+4'">
+                    </div>
+
+                    <!-- Photo 5 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic11.jpg" alt="Photo 5" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/A855F7/FFFFFF?text=Photo+5'">
+                    </div>
+
+                    <!-- Photo 6 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic10.jpg" alt="Photo 6" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/3B82F6/FFFFFF?text=Photo+6'">
+                    </div>
+
+                    <!-- Photo 7 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic09.jpg" alt="Photo 7" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/F472B6/FFFFFF?text=Photo+7'">
+                    </div>
+
+                    <!-- Photo 8 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic08.jpg" alt="Photo 8" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/14B8A6/FFFFFF?text=Photo+8'">
+                    </div>
+
+                    <!-- Photo 9 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic07.jpg" alt="Photo 9" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/F59E0B/FFFFFF?text=Photo+9'">
+                    </div>
+
+                    <!-- Photo 10 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic06.jpg" alt="Photo 10" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/8B5CF6/FFFFFF?text=Photo+10'">
+                    </div>
+
+                    <!-- Photo 11 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic05.jpg" alt="Photo 11" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/EF4444/FFFFFF?text=Photo+11'">
+                    </div>
+
+                    <!-- Photo 12 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic04.jpg" alt="Photo 12" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/10B981/FFFFFF?text=Photo+12'">
+                    </div>
+
+                    <!-- Photo 13 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic03.jpg" alt="Photo 13" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/DB2777/FFFFFF?text=Photo+13'">
+                    </div>
+
+                    <!-- Photo 14 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic02.jpg" alt="Photo 14" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/0EA5E9/FFFFFF?text=Photo+14'">
+                    </div>
+
+                    <!-- Photo 15 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic01.jpeg" alt="Photo 15" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/EC4899/FFFFFF?text=Photo+15'">
+                    </div>
+                </div>
+
+                <!-- Navigation Dots -->
+                <div class="flex justify-center gap-2 p-4 bg-white flex-wrap">
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-purple-600 cursor-pointer transition-all"
+                        data-index="0"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="1"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="2"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="3"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="4"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="5"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="6"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="7"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="8"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="9"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="10"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="11"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="12"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="13"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="14"></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Birthday Cards Section -->
+        <div class="w-full max-w-6xl mb-12" id="cards">
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-8 animate-slide-in"
+                style="animation-delay: 0.4s;">
+                Special Birthday Cards
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
+                    style="animation-delay: 0.6s;">
+                    <div class="text-5xl mb-4">🎂</div>
+                    <h4 class="text-2xl font-bold text-pink-600 mb-2">Make a Wish</h4>
+                    <p class="text-gray-700">Close your eyes and make a wish. I will fulfill all of your dreams,
+                        inshaAllah! This year will be another wonderful year for you, inshaAllah!</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
+                    style="animation-delay: 0.8s;">
+                    <div class="text-5xl mb-4">💝</div>
+                    <h4 class="text-2xl font-bold text-red-500 mb-2">You Are Special</h4>
+                    <p class="text-gray-700">Every moment with you is precious. Your smile brightens my day, and I feel
+                        so lucky to have your presence today and always.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
+                    style="animation-delay: 1.0s;">
+                    <div class="text-5xl mb-4">🌸</div>
+                    <h4 class="text-2xl font-bold text-purple-500 mb-2">Beautiful Journey</h4>
+                    <p class="text-gray-700">You gave me another chance to live. You healed me, and you make my life
+                        meaningful. That is the reason I am here, and that is why I am happy.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
+                    style="animation-delay: 1.2s;">
+                    <div class="text-5xl mb-4">✨</div>
+                    <h4 class="text-2xl font-bold text-blue-500 mb-2">Shine Bright</h4>
+                    <p class="text-gray-700">You shine brighter than the moon. Your strength, kindness, and love inspire
+                        me every moment. Cherish this special day!</p>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
+                    style="animation-delay: 1.4s;">
+                    <div class="text-5xl mb-4">🎈</div>
+                    <h4 class="text-2xl font-bold text-indigo-500 mb-2">Celebrate Life</h4>
+                    <p class="text-gray-700">Life is a celebration, and you are its star. Thank you for being the
+                        amazing person you are. Happy Birthday, beautiful!</p>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
+                    style="animation-delay: 1.6s;">
+                    <div class="text-5xl mb-4">🌟</div>
+                    <h4 class="text-2xl font-bold text-yellow-500 mb-2">Forever Young</h4>
+                    <p class="text-gray-700">Age is just a number, and you only get better with time. Here's to health,
+                        happiness, and a year filled with endless possibilities!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline / Memories Section -->
+        <div class="w-full max-w-5xl mb-12" id="timeline">
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-12 animate-slide-in">
+                Our Beautiful Journey Together 💕
+            </h3>
+
+            <!-- Timeline with Images -->
+            <div class="relative">
+                <!-- Vertical Line (visible on desktop) -->
+                <div
+                    class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-purple-400 to-pink-400">
+                </div>
+
+                <!-- Timeline Items -->
+                <div class="space-y-12">
+                    <!-- Timeline Item 1 - Left -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.1s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We01.jpg" alt="The Beginning" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/D8B4FE/FFFFFF?text=The+Beginning'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center">
+                                    <p class="font-bold">The Beginning</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Mobile/Right Content -->
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We01.jpg" alt="The Beginning" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/D8B4FE/FFFFFF?text=The+Beginning'">
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-purple-600 mb-2">The Beginning</h4>
+                                <p class="text-gray-600">Every beautiful story starts with one moment. That spark, that
+                                    connection, that feeling of finding someone truly special. Thank you for being part
+                                    of my life.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 2 - Right -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.1s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end">
+                        </div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Desktop Right Content -->
+                        <div class="hidden md:block md:w-1/2">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We02.jpg" alt="Growing Together" class="h-94 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center w-full">
+                                    <p class="font-bold">Growing Together</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Content -->
+                        <div class="md:hidden w-full">
+                            <div class="mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We02.jpg" alt="Growing Together" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-pink-600 mb-2">Growing Together</h4>
+                                <p class="text-gray-600">Through every moment, every laugh, every tear, you've brought
+                                    joy and light to my life. You inspire me every single day to be better.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 3 - Left -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.3s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We03.jpg" alt="Today & Forever" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/C7D2FE/FFFFFF?text=Today+Forever'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center">
+                                    <p class="font-bold">Forever</p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Mobile/Right Content -->
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We03.jpg" alt="Today & Forever" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/C7D2FE/FFFFFF?text=Today+Forever'">
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Forever</h4>
+                                <p class="text-gray-600">This birthday is a celebration of you and all the wonderful
+                                    memories we've created together. Here's to many more adventures, laughs, and
+                                    unforgettable moments!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 4 - Right -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.1s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end">
+                        </div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Desktop Right Content -->
+                        <div class="hidden md:block md:w-1/2">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We04.jpg" alt="Growing Together" class="h-94 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center w-full">
+                                    <p class="font-bold">Growing Together</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Content -->
+                        <div class="md:hidden w-full">
+                            <div class="mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We04.jpg" alt="Growing Together" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-rose-600 mb-2">Precious Moments</h4>
+                                <p class="text-gray-600">Every second with you is a treasure. From the smallest gestures
+                                    to the grandest celebrations, each moment is etched in my heart forever.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 5 - Left -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.5s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We05.jpg" alt="Our Story Continues" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/A78BFA/FFFFFF?text=Our+Story'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center">
+                                    <p class="font-bold">Our Story Continues</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-violet-500 to-purple-500 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Mobile/Right Content -->
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We05.jpg" alt="Our Story Continues"
+                                        class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/A78BFA/FFFFFF?text=Our+Story'">
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-violet-600 mb-2">Our Story Continues</h4>
+                                <p class="text-gray-600">Today we celebrate the beautiful journey we've shared, but the
+                                    best chapters are yet to come. I will marry you as soon as I can inshaAllah. You are
+                                    the queen of my heart and soul. <b>I love you so much baby!</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Birthday Messages/Wishes Section -->
+        <div class="w-full max-w-4xl mb-12" id="messages">
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-8 animate-slide-in">
+                Birthday Wishes for You 🎁
+            </h3>
+            <div class="space-y-4">
+                <div
+                    class="bg-gradient-to-r from-pink-100 to-purple-100 rounded-lg p-6 border-2 border-pink-300 animate-float-up">
+                    <p class="text-gray-800 text-lg italic mb-2">"May Allah bless you and may this year bring you
+                        endless joy, incredible
+                        adventures, and dreams that come true. You deserve the world pretty!"</p>
+                    <p class="text-purple-600 font-semibold">💝 With all my love</p>
+                </div>
+                <div class="bg-gradient-to-r from-blue-100 to-pink-100 rounded-lg p-6 border-2 border-blue-300 animate-float-up"
+                    style="animation-delay: 0.1s;">
+                    <p class="text-gray-800 text-lg italic mb-2">"Thank you for being the most amazing person in my
+                        life. Your presence makes every day special, and I'm grateful for you more than words can
+                        express."</p>
+                    <p class="text-blue-600 font-semibold">💙 Forever grateful</p>
+                </div>
+                <div class="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-lg p-6 border-2 border-yellow-300 animate-float-up"
+                    style="animation-delay: 0.2s;">
+                    <p class="text-gray-800 text-lg italic mb-2">"Here's to celebrating YOU today! Your beauty,
+                        love, and kindness make my world full of peace. Shine bright, beautiful! 🌟"</p>
+                    <p class="text-yellow-600 font-semibold">✨ You're amazing</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Celebration Stats -->
+        <div class="w-full max-w-4xl mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up">
+                    <p class="text-3xl font-bold text-purple-600">∞</p>
+                    <p class="text-gray-600 font-semibold mt-2">Forever</p>
+                    <p class="text-sm text-gray-500">I'll be there for you</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up"
+                    style="animation-delay: 0.1s;">
+                    <p class="text-3xl font-bold text-pink-600">💯</p>
+                    <p class="text-gray-600 font-semibold mt-2">Perfect</p>
+                    <p class="text-sm text-gray-500">Just the way you are</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up"
+                    style="animation-delay: 0.2s;">
+                    <p class="text-3xl font-bold text-blue-600">🌍</p>
+                    <p class="text-gray-600 font-semibold mt-2">World</p>
+                    <p class="text-sm text-gray-500">You mean everything</p>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up"
+                    style="animation-delay: 0.3s;">
+                    <p class="text-3xl font-bold text-red-600">❤️</p>
+                    <p class="text-gray-600 font-semibold mt-2">Love</p>
+                    <p class="text-sm text-gray-500">With all my heart</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="w-full max-w-4xl mb-12" id="comments">
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-8 animate-slide-in">
+                If you have any comment, write here. 💬
+            </h3>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+                <form id="commentForm">
+                    <div class="mb-4">
+                        <label for="commentText"
+                            class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Your Comment:</label>
+                        <textarea id="commentText" name="commentText" rows="4"
+                            class="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
+                            placeholder="Share your thoughts, wishes, or love here..."></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg text-sm sm:text-base">
+                        Post Comment ✨
+                    </button>
+                </form>
+                <div id="commentsList" class="mt-6 space-y-4">
+                    <!-- Comments will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-12 pb-8">
+            <p class="text-lg md:text-xl text-purple-600 font-semibold mb-2">
+                🎊 Have the most wonderful birthday ever! 🎊
+            </p>
+            <p class="text-gray-600">Made by your hubby on your special day</p>
+        </div>
+    </div>
+
+    <!-- JavaScript for Photo Carousel -->
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Photo Carousel
+            const photoItems = document.querySelectorAll('.photo-item');
+            const carouselDots = document.querySelectorAll('.carousel-dot');
+            let currentPhotoIndex = 0;
+
+            function showPhoto(index) {
+                photoItems.forEach((item, i) => {
+                    item.classList.toggle('hidden', i !== index);
+                });
+
+                carouselDots.forEach((dot, i) => {
+                    dot.classList.toggle('bg-purple-600', i === index);
+                    dot.classList.toggle('bg-gray-300', i !== index);
+                });
+            }
+
+            function nextPhoto() {
+                currentPhotoIndex = (currentPhotoIndex + 1) % photoItems.length;
+                showPhoto(currentPhotoIndex);
+            }
+
+            function prevPhoto() {
+                currentPhotoIndex = (currentPhotoIndex - 1 + photoItems.length) % photoItems.length;
+                showPhoto(currentPhotoIndex);
+            }
+
+            // Navigation button handlers
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.addEventListener('click', prevPhoto);
+            nextBtn.addEventListener('click', nextPhoto);
+
+            // Auto-rotate photos every 3 seconds
+            setInterval(nextPhoto, 3000);
+
+            // Add click handlers to dots
+            carouselDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    currentPhotoIndex = index;
+                    showPhoto(currentPhotoIndex);
+                });
+            });
+
+            // Smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Comment Section
+            const commentForm = document.getElementById('commentForm');
+            const commentsList = document.getElementById('commentsList');
+            let comments = JSON.parse(localStorage.getItem('birthdayComments') || '[]');
+            let editingIndex = null;
+            let deleteIndex = null;
+
+            // Modal elements
+            const deleteModal = document.getElementById('deleteModal');
+            const confirmDeleteBtn = document.getElementById('confirmDelete');
+            const cancelDeleteBtn = document.getElementById('cancelDelete');
+
+            // Show delete modal
+            function showDeleteModal(index) {
+                deleteIndex = index;
+                deleteModal.classList.add('active');
+            }
+
+            // Hide delete modal
+            function hideDeleteModal() {
+                deleteModal.classList.remove('active');
+                deleteIndex = null;
+            }
+
+            // Confirm delete button
+            confirmDeleteBtn.addEventListener('click', function () {
+                if (deleteIndex !== null) {
+                    comments.splice(deleteIndex, 1);
+                    localStorage.setItem('birthdayComments', JSON.stringify(comments));
+                    displayComments();
+                    hideDeleteModal();
+                }
+            });
+
+            // Cancel delete button
+            cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+
+            // Close modal when clicking backdrop
+            deleteModal.addEventListener('click', function (e) {
+                if (e.target === deleteModal) {
+                    hideDeleteModal();
+                }
+            });
+
+            // Display existing comments
+            function displayComments() {
+                commentsList.innerHTML = '';
+                comments.forEach((comment, index) => {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3 sm:p-4 border-2 border-purple-200';
+                    commentDiv.innerHTML = `
+                        <p class="text-sm sm:text-base text-gray-800 mb-3 break-words">${escapeHtml(comment.text)}</p>
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
+                            <p class="text-xs sm:text-sm text-gray-500 order-2 sm:order-1">${comment.date}</p>
+                            <div class="flex gap-2 order-1 sm:order-2">
+                                <button onclick="editComment(${index})" class="flex-1 sm:flex-none px-3 py-1.5 bg-blue-500 text-white text-xs sm:text-sm rounded hover:bg-blue-600 transition-colors">
+                                    <i class="fas fa-edit"></i><span class="sm:inline"> Edit</span>
+                                </button>
+                                <button onclick="deleteComment(${index})" class="flex-1 sm:flex-none px-3 py-1.5 bg-red-500 text-white text-xs sm:text-sm rounded hover:bg-red-600 transition-colors">
+                                    <i class="fas fa-trash"></i><span class="sm:inline"> Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    commentsList.appendChild(commentDiv);
+                });
+            }
+
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Delete comment
+            window.deleteComment = function (index) {
+                showDeleteModal(index);
+            };
+
+            // Edit comment
+            window.editComment = function (index) {
+                editingIndex = index;
+                document.getElementById('commentText').value = comments[index].text;
+                document.querySelector('button[type="submit"]').textContent = 'Update Comment ✨';
+                document.getElementById('commentText').focus();
+
+                // Scroll to form
+                commentForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+
+            // Handle form submission
+            commentForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const commentText = document.getElementById('commentText').value.trim();
+
+                if (commentText) {
+                    if (editingIndex !== null) {
+                        // Update existing comment
+                        comments[editingIndex].text = commentText;
+                        comments[editingIndex].date = new Date().toLocaleString() + ' (edited)';
+                        editingIndex = null;
+                        document.querySelector('button[type="submit"]').textContent = 'Post Comment ✨';
+                    } else {
+                        // Add new comment
+                        const newComment = {
+                            text: commentText,
+                            date: new Date().toLocaleString()
+                        };
+                        comments.unshift(newComment);
+                    }
+
+                    localStorage.setItem('birthdayComments', JSON.stringify(comments));
+                    document.getElementById('commentText').value = '';
+                    displayComments();
+                }
+            });
+
+            // Display comments on load
+            displayComments();
+
+            // Photo Carousel initialized
+        });
+    </script>
+</body>
+
+</html>
