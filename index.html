@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafu's Birthday! 🎉</title>
+    <title>Rafu's Birthday</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -130,7 +130,7 @@
         }
 
         .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #00008B 0%, #4169E1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -198,10 +198,121 @@
                 padding: 2rem;
             }
         }
+
+        .video-hero {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: #020617;
+            display: block;
+        }
+
+        .video-hero video {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            opacity: 0.75;
+        }
+
+        .video-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            pointer-events: none;
+        }
+
+        .video-hero-content {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1rem;
+            padding: 2rem;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .video-hero-content h2 {
+            font-size: clamp(2.25rem, 4vw, 4.75rem);
+            line-height: 1.05;
+            color: #f8fafc;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin: 0;
+        }
+
+        .video-hero-content p {
+            margin-top: 1rem;
+            color: rgba(248, 250, 252, 0.85);
+            font-size: 1rem;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        body {
+            padding-top: 56px;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding-top: 72px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .video-hero-content {
+                padding: 1.25rem;
+                align-items: flex-start;
+                text-align: left;
+            }
+
+            .video-hero-content h2 {
+                font-size: 1.1rem;
+                line-height: 1.1;
+            }
+
+            .video-hero-content p {
+                font-size: 0.7rem;
+                max-width: 100%;
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+
+            .main-container {
+                padding-top: 1.5rem !important;
+            }
+        }
+
+        .h-94 {
+            height: 24rem;
+        }
+
+        .mobile-nav-panel {
+            display: none;
+        }
+
+        .mobile-nav-panel.active {
+            display: block;
+        }
+
+        /* Hide duplicate image-only cards on mobile (shadow-xl cards without p-6 text) */
+        @media (max-width: 767px) {
+            .md\:w-1\/2>.bg-white.shadow-xl.overflow-hidden {
+                display: none;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen smooth-scroll">
+<body id="top" class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 min-h-screen smooth-scroll"
+    style="padding-top: 56px;">
     <!-- Delete Confirmation Modal -->
     <div id="deleteModal" class="modal-backdrop">
         <div class="modal-content">
@@ -221,56 +332,75 @@
         </div>
     </div>
     <!-- Navigation Header -->
-    <nav class="fixed top-0 left-0 right-0 bg-white bg-opacity-95 shadow-lg z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold gradient-text">Rafu's Birthday 🎂</h1>
+    <nav class="fixed top-0 left-0 right-0 bg-blue-900 bg-opacity-95 shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 md:py-4 flex items-center justify-between gap-4">
+            <h1 class="text-lg md:text-2xl font-bold text-white">Rafu's Birthday</h1>
+
             <div class="hidden md:flex gap-6">
-                <a href="#carousel" class="text-purple-600 hover:text-pink-600 transition">Gallery</a>
-                <a href="#cards" class="text-purple-600 hover:text-pink-600 transition">Wishes</a>
-                <a href="#timeline" class="text-purple-600 hover:text-pink-600 transition">Memories</a>
-                <a href="#messages" class="text-purple-600 hover:text-pink-600 transition">Messages</a>
+                <a href="#top" class="text-white hover:text-blue-200 transition text-sm">Home</a>
+                <a href="#carousel" class="text-white hover:text-blue-200 transition text-sm">Gallery</a>
+                <a href="#cards" class="text-white hover:text-blue-200 transition text-sm">Cards</a>
+                <a href="#timeline" class="text-white hover:text-blue-200 transition text-sm">Memories</a>
+                <a href="#messages" class="text-white hover:text-blue-200 transition text-sm">Wishes</a>
             </div>
 
+            <button id="navToggle"
+                class="md:hidden text-white p-2 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="mobileNav" class="mobile-nav-panel md:hidden bg-blue-900 bg-opacity-95 border-t border-blue-800">
+            <div class="flex flex-col gap-3 px-4 py-3">
+                <a href="#top" class="text-white hover:text-blue-200 transition text-sm">Home</a>
+                <a href="#carousel" class="text-white hover:text-blue-200 transition text-sm">Gallery</a>
+                <a href="#cards" class="text-white hover:text-blue-200 transition text-sm">Cards</a>
+                <a href="#timeline" class="text-white hover:text-blue-200 transition text-sm">Memories</a>
+                <a href="#messages" class="text-white hover:text-blue-200 transition text-sm">Wishes</a>
+            </div>
         </div>
     </nav>
 
-    <!-- Balloons decoration -->
-    <div class="fixed top-16 left-0 right-0 pointer-events-none overflow-hidden h-32 z-[-10000]">
-        <div class="absolute top-5 left-10 w-6 h-8 bg-red-500 rounded-full animate-float" style="animation-delay: 0s;">
+    <!-- Video Hero Section -->
+    <section class="video-hero">
+        <video autoplay muted loop playsinline>
+            <source src="/Video/Us.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="video-hero-content">
+            <h2>The Most Precious Gift I Have Ever Received</h2>
+            <p>Celebrating your presence in my life with a calm, elegant moment and a powerful message from the heart.
+            </p>
         </div>
-        <div class="absolute top-10 left-32 w-6 h-8 bg-yellow-400 rounded-full animate-float"
-            style="animation-delay: 0.5s;"></div>
-        <div class="absolute top-3 right-20 w-6 h-8 bg-pink-500 rounded-full animate-float"
-            style="animation-delay: 1s;"></div>
-        <div class="absolute top-12 right-40 w-6 h-8 bg-blue-400 rounded-full animate-float"
-            style="animation-delay: 1.5s;"></div>
-    </div>
+    </section>
 
     <!-- Main Container -->
-    <div class="min-h-screen flex flex-col items-center justify-center px-4 py-8 pt-24">
+    <div class="main-container min-h-screen flex flex-col items-center justify-center px-4 py-8 pt-24">
         <!-- Hero Section -->
         <div class="text-center mb-12 animate-slide-in">
-            <h1 class="text-4xl md:text-6xl font-bold text-purple-600 mb-2">
+            <h1 class="text-3xl md:text-6xl font-bold text-white mb-2">
                 Happy Birthday
             </h1>
-            <h2 class="text-5xl md:text-7xl font-black text-pink-600 mb-4">
-                Rafu Baby! 🎉
+            <h2 class="text-3xl md:text-7xl font-black text-blue-200 mb-4">
+                Rafu Baby!
             </h2>
-            <p class="text-lg md:text-2xl text-purple-500 font-semibold mb-6">
-                Wishing you a very lovely day for my wify filled with love, laughter, and happiness
+            <p class="text-lg md:text-2xl text-blue-100 font-semibold mb-6">
+                Wishing you a very lovely day for my wife filled with love, laughter, and happiness
             </p>
             <!-- Birthday Age Display -->
             <div class="inline-block bg-white rounded-3xl shadow-lg px-8 py-4 mb-6">
                 <div class="text-center">
-                    <p class="text-lg text-gray-600 mb-2">Born: <span class="font-bold text-purple-600">13 August
+                    <p class="text-lg text-gray-600 mb-2">Born: <span class="font-bold text-blue-600">13 August
                             2006</span></p>
                     <p
-                        class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
-                        My baby turned 20 Today! 🎂
+                        class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
+                        My Baby Turned 20 Today!
                     </p>
-                    <div class="mt-3 pt-3 border-t-2 border-purple-200">
+                    <div class="mt-3 pt-3 border-t-2 border-blue-200">
                         <p class="text-lg text-gray-500">My little baby is growing<span
-                                class="text-xl font-bold text-pink-600"></span></p>
+                                class="text-xl font-bold text-blue-600"></span></p>
                     </div>
                 </div>
             </div>
@@ -283,7 +413,7 @@
                     class="photo-carousel h-96 md:h-[32rem] lg:h-[36rem] bg-gray-200 flex items-center justify-center relative">
                     <!-- Previous Button -->
                     <button id="prevBtn"
-                        class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 rounded-full p-2 sm:p-3 shadow-lg transition-all hover:scale-110 z-10">
+                        class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 sm:p-3 shadow-lg transition-all hover:scale-110 z-10">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
                             </path>
@@ -292,7 +422,7 @@
 
                     <!-- Next Button -->
                     <button id="nextBtn"
-                        class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-purple-600 rounded-full p-2 sm:p-3 shadow-lg transition-all hover:scale-110 z-10">
+                        class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 sm:p-3 shadow-lg transition-all hover:scale-110 z-10">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
                             </path>
@@ -385,14 +515,44 @@
 
                     <!-- Photo 15 -->
                     <div class="photo-item hidden w-full h-full">
-                        <img src="Images/Pic01.jpeg" alt="Photo 15" class="w-full h-full object-cover"
+                        <img src="Images/Pic01.jpg" alt="Photo 15" class="w-full h-full object-cover"
                             onerror="this.src='https://via.placeholder.com/800x600/EC4899/FFFFFF?text=Photo+15'">
+                    </div>
+
+                    <!-- Photo 16 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic16.jpg" alt="Photo 16" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/2563EB/FFFFFF?text=Photo+16'">
+                    </div>
+
+                    <!-- Photo 17 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic17.jpg" alt="Photo 17" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/1D4ED8/FFFFFF?text=Photo+17'">
+                    </div>
+
+                    <!-- Photo 18 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic18.jpg" alt="Photo 18" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/1E40AF/FFFFFF?text=Photo+18'">
+                    </div>
+
+                    <!-- Photo 19 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic19.jpg" alt="Photo 19" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/1E3A8A/FFFFFF?text=Photo+19'">
+                    </div>
+
+                    <!-- Photo 20 -->
+                    <div class="photo-item hidden w-full h-full">
+                        <img src="Images/Pic20.jpg" alt="Photo 20" class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/800x600/1E40AF/FFFFFF?text=Photo+20'">
                     </div>
                 </div>
 
                 <!-- Navigation Dots -->
                 <div class="flex justify-center gap-2 p-4 bg-white flex-wrap">
-                    <button class="carousel-dot w-3 h-3 rounded-full bg-purple-600 cursor-pointer transition-all"
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-blue-600 cursor-pointer transition-all"
                         data-index="0"></button>
                     <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
                         data-index="1"></button>
@@ -422,13 +582,23 @@
                         data-index="13"></button>
                     <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
                         data-index="14"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="15"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="16"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="17"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="18"></button>
+                    <button class="carousel-dot w-3 h-3 rounded-full bg-gray-300 cursor-pointer transition-all"
+                        data-index="19"></button>
                 </div>
             </div>
         </div>
 
         <!-- Birthday Cards Section -->
         <div class="w-full max-w-6xl mb-12" id="cards">
-            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-8 animate-slide-in"
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-white mb-8 animate-slide-in"
                 style="animation-delay: 0.4s;">
                 Special Birthday Cards
             </h3>
@@ -437,8 +607,7 @@
                 <!-- Card 1 -->
                 <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
                     style="animation-delay: 0.6s;">
-                    <div class="text-5xl mb-4">🎂</div>
-                    <h4 class="text-2xl font-bold text-pink-600 mb-2">Make a Wish</h4>
+                    <h4 class="text-2xl font-bold text-blue-600 mb-2">Make a Wish</h4>
                     <p class="text-gray-700">Close your eyes and make a wish. I will fulfill all of your dreams,
                         inshaAllah! This year will be another wonderful year for you, inshaAllah!</p>
                 </div>
@@ -446,8 +615,7 @@
                 <!-- Card 2 -->
                 <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
                     style="animation-delay: 0.8s;">
-                    <div class="text-5xl mb-4">💝</div>
-                    <h4 class="text-2xl font-bold text-red-500 mb-2">You Are Special</h4>
+                    <h4 class="text-2xl font-bold text-blue-700 mb-2">You Are Special</h4>
                     <p class="text-gray-700">Every moment with you is precious. Your smile brightens my day, and I feel
                         so lucky to have your presence today and always.</p>
                 </div>
@@ -455,8 +623,7 @@
                 <!-- Card 3 -->
                 <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
                     style="animation-delay: 1.0s;">
-                    <div class="text-5xl mb-4">🌸</div>
-                    <h4 class="text-2xl font-bold text-purple-500 mb-2">Beautiful Journey</h4>
+                    <h4 class="text-2xl font-bold text-blue-800 mb-2">Beautiful Journey</h4>
                     <p class="text-gray-700">You gave me another chance to live. You healed me, and you make my life
                         meaningful. That is the reason I am here, and that is why I am happy.</p>
                 </div>
@@ -464,8 +631,7 @@
                 <!-- Card 4 -->
                 <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
                     style="animation-delay: 1.2s;">
-                    <div class="text-5xl mb-4">✨</div>
-                    <h4 class="text-2xl font-bold text-blue-500 mb-2">Shine Bright</h4>
+                    <h4 class="text-2xl font-bold text-blue-600 mb-2">Shine Bright</h4>
                     <p class="text-gray-700">You shine brighter than the moon. Your strength, kindness, and love inspire
                         me every moment. Cherish this special day!</p>
                 </div>
@@ -473,8 +639,7 @@
                 <!-- Card 5 -->
                 <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
                     style="animation-delay: 1.4s;">
-                    <div class="text-5xl mb-4">🎈</div>
-                    <h4 class="text-2xl font-bold text-indigo-500 mb-2">Celebrate Life</h4>
+                    <h4 class="text-2xl font-bold text-blue-700 mb-2">Celebrate Life</h4>
                     <p class="text-gray-700">Life is a celebration, and you are its star. Thank you for being the
                         amazing person you are. Happy Birthday, beautiful!</p>
                 </div>
@@ -482,8 +647,7 @@
                 <!-- Card 6 -->
                 <div class="birthday-card bg-white rounded-xl shadow-lg p-6 hover:shadow-2xl transition-all duration-300 animate-slide-in"
                     style="animation-delay: 1.6s;">
-                    <div class="text-5xl mb-4">🌟</div>
-                    <h4 class="text-2xl font-bold text-yellow-500 mb-2">Forever Young</h4>
+                    <h4 class="text-2xl font-bold text-blue-800 mb-2">Forever Young</h4>
                     <p class="text-gray-700">Age is just a number, and you only get better with time. Here's to health,
                         happiness, and a year filled with endless possibilities!</p>
                 </div>
@@ -492,15 +656,15 @@
 
         <!-- Timeline / Memories Section -->
         <div class="w-full max-w-5xl mb-12" id="timeline">
-            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-12 animate-slide-in">
-                Our Beautiful Journey Together 💕
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-white mb-12 animate-slide-in">
+                Our Beautiful Journey Together
             </h3>
 
             <!-- Timeline with Images -->
             <div class="relative">
                 <!-- Vertical Line (visible on desktop) -->
                 <div
-                    class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-purple-400 to-pink-400">
+                    class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 to-blue-600">
                 </div>
 
                 <!-- Timeline Items -->
@@ -509,7 +673,7 @@
                     <div class="flex gap-6 animate-float-up" style="animation-delay: 0.1s;">
                         <div class="hidden md:flex md:w-1/2 justify-end">
                             <div
-                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
                                 <img src="Images/We01.jpg" alt="The Beginning" class="h-64 w-full object-cover"
                                     onerror="this.src='https://via.placeholder.com/600x400/D8B4FE/FFFFFF?text=The+Beginning'">
                                 <div
@@ -522,7 +686,7 @@
                         <!-- Timeline Dot -->
                         <div class="hidden md:flex md:w-auto md:justify-center z-50">
                             <div
-                                class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-4 border-white shadow-lg">
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
                             </div>
                         </div>
 
@@ -535,7 +699,7 @@
                                 </div>
                             </div>
                             <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-2xl font-bold text-purple-600 mb-2">The Beginning</h4>
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">The Beginning</h4>
                                 <p class="text-gray-600">Every beautiful story starts with one moment. That spark, that
                                     connection, that feeling of finding someone truly special. Thank you for being part
                                     of my life.</p>
@@ -543,43 +707,35 @@
                         </div>
                     </div>
 
-                    <!-- Timeline Item 2 - Right -->
-                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.1s;">
-                        <div class="hidden md:flex md:w-1/2 justify-end">
-                        </div>
+                    <!-- Timeline Item 2 - Image Only -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.2s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end"></div>
 
                         <!-- Timeline Dot -->
                         <div class="hidden md:flex md:w-auto md:justify-center z-50">
                             <div
-                                class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-4 border-white shadow-lg">
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
                             </div>
                         </div>
 
-                        <!-- Desktop Right Content -->
-                        <div class="hidden md:block md:w-1/2">
-                            <div
-                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                <img src="Images/We02.jpg" alt="Growing Together" class="h-94 w-full object-cover"
-                                    onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
-                                <div
-                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center w-full">
-                                    <p class="font-bold">Growing Together</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mobile Content -->
-                        <div class="md:hidden w-full">
-                            <div class="mb-6">
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
                                 <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
-                                    <img src="Images/We02.jpg" alt="Growing Together" class="w-full h-full object-cover"
-                                        onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                    <img src="Images/We02.jpg" alt="A Cherished Moment"
+                                        class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/93C5FD/FFFFFF?text=Moment+6'">
                                 </div>
                             </div>
-                            <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-2xl font-bold text-pink-600 mb-2">Growing Together</h4>
-                                <p class="text-gray-600">Through every moment, every laugh, every tear, you've brought
-                                    joy and light to my life. You inspire me every single day to be better.</p>
+                            <div class="md:hidden bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Cherished Moments</h4>
+                                <p class="text-gray-600">These quiet moments with you are the ones I treasure most. Your
+                                    smile, your laugh, your presence—they light up my world in ways I never thought
+                                    possible.</p>
+                            </div>
+                            <div
+                                class="hidden md:block bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We02.jpg" alt="A Cherished Moment" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/93C5FD/FFFFFF?text=Moment+6'">
                             </div>
                         </div>
                     </div>
@@ -588,14 +744,83 @@
                     <div class="flex gap-6 animate-float-up" style="animation-delay: 0.3s;">
                         <div class="hidden md:flex md:w-1/2 justify-end">
                             <div
-                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                <img src="Images/We03.jpg" alt="Today & Forever" class="h-64 w-full object-cover"
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                                <img src="Images/We03.jpg" alt="Growing Together" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center">
+                                    <p class="font-bold">Growing Together</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <!-- Mobile/Right Content -->
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We03.jpg" alt="Growing Together" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Growing Together</h4>
+                                <p class="text-gray-600">Through every moment, every laugh, every tear, you've brought
+                                    joy and light to my life. You inspire me every single day to be better.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 4 - Image Only -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.4s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end"></div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We04.jpg" alt="Another Special Moment"
+                                        class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/60A5FA/FFFFFF?text=Moment+7'">
+                                </div>
+                            </div>
+                            <div class="md:hidden bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Special Visits</h4>
+                                <p class="text-gray-600">Every visit with you feels like a celebration. You turn even
+                                    the simplest moments into something unforgettable, and I cherish each one.
+                                </p>
+                            </div>
+                            <div
+                                class="hidden md:block bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We04.jpg" alt="Another Special Moment" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/60A5FA/FFFFFF?text=Moment+7'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 5 - Left -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.5s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                                <img src="Images/We05.jpg" alt="Today & Forever" class="h-64 w-full object-cover"
                                     onerror="this.src='https://via.placeholder.com/600x400/C7D2FE/FFFFFF?text=Today+Forever'">
                                 <div
                                     class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center">
                                     <p class="font-bold">Forever</p>
                                 </div>
-
                             </div>
                         </div>
 
@@ -610,7 +835,7 @@
                         <div class="md:w-1/2">
                             <div class="md:hidden mb-6">
                                 <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
-                                    <img src="Images/We03.jpg" alt="Today & Forever" class="w-full h-full object-cover"
+                                    <img src="Images/We05.jpg" alt="Today & Forever" class="w-full h-full object-cover"
                                         onerror="this.src='https://via.placeholder.com/600x400/C7D2FE/FFFFFF?text=Today+Forever'">
                                 </div>
                             </div>
@@ -623,53 +848,113 @@
                         </div>
                     </div>
 
-                    <!-- Timeline Item 4 - Right -->
-                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.1s;">
+                    <!-- Timeline Item 6 - Image Only -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.6s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end"></div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We06.jpg" alt="A Quiet Moment" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/93C5FD/FFFFFF?text=Moment+8'">
+                                </div>
+                            </div>
+                            <div class="md:hidden bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Our Tours</h4>
+                                <p class="text-gray-600">Our tours aren’t just about places, they’re about us. Every
+                                    step we take together becomes a story worth remembering.</p>
+                            </div>
+                            <div
+                                class="hidden md:block bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We06.jpg" alt="A Quiet Moment" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/93C5FD/FFFFFF?text=Moment+8'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 7 - Left -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.7s;">
                         <div class="hidden md:flex md:w-1/2 justify-end">
+                            <div
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                                <img src="Images/We07.jpg" alt="Precious Moments" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Precious+Moments'">
+                                <div
+                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center w-full">
+                                    <p class="font-bold">Precious Moments</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Timeline Dot -->
                         <div class="hidden md:flex md:w-auto md:justify-center z-50">
                             <div
-                                class="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-4 border-white shadow-lg">
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
                             </div>
                         </div>
 
-                        <!-- Desktop Right Content -->
-                        <div class="hidden md:block md:w-1/2">
-                            <div
-                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                <img src="Images/We04.jpg" alt="Growing Together" class="h-94 w-full object-cover"
-                                    onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
-                                <div
-                                    class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center w-full">
-                                    <p class="font-bold">Growing Together</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mobile Content -->
-                        <div class="md:hidden w-full">
-                            <div class="mb-6">
+                        <!-- Mobile/Right Content -->
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
                                 <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
-                                    <img src="Images/We04.jpg" alt="Growing Together" class="w-full h-full object-cover"
-                                        onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Growing+Together'">
+                                    <img src="Images/We07.jpg" alt="Precious Moments" class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/FB7185/FFFFFF?text=Precious+Moments'">
                                 </div>
                             </div>
                             <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-2xl font-bold text-rose-600 mb-2">Precious Moments</h4>
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Precious Moments</h4>
                                 <p class="text-gray-600">Every second with you is a treasure. From the smallest gestures
                                     to the grandest celebrations, each moment is etched in my heart forever.</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Timeline Item 5 - Left -->
-                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.5s;">
+                    <!-- Timeline Item 8 - Image Only -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.8s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end"></div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We08.jpg" alt="A Beautiful Memory"
+                                        class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/60A5FA/FFFFFF?text=Moment+9'">
+                                </div>
+                            </div>
+                            <div class="md:hidden bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Beautiful Memories</h4>
+                                <p class="text-gray-600">Your beauty shines not just on the outside, but in every kind
+                                    gesture, every loving word, and every moment you've given me. You are truly the most
+                                    beautiful soul I know.</p>
+                            </div>
+                            <div
+                                class="hidden md:block bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We08.jpg" alt="A Beautiful Memory" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/60A5FA/FFFFFF?text=Moment+9'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 9 - Left -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 0.9s;">
                         <div class="hidden md:flex md:w-1/2 justify-end">
                             <div
-                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                                <img src="Images/We05.jpg" alt="Our Story Continues" class="h-64 w-full object-cover"
+                                class="bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 relative">
+                                <img src="Images/We09.jpg" alt="Our Story Continues" class="h-64 w-full object-cover"
                                     onerror="this.src='https://via.placeholder.com/600x400/A78BFA/FFFFFF?text=Our+Story'">
                                 <div
                                     class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white py-3 text-center">
@@ -689,16 +974,49 @@
                         <div class="md:w-1/2">
                             <div class="md:hidden mb-6">
                                 <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
-                                    <img src="Images/We05.jpg" alt="Our Story Continues"
+                                    <img src="Images/We09.jpg" alt="Our Story Continues"
                                         class="w-full h-full object-cover"
                                         onerror="this.src='https://via.placeholder.com/600x400/A78BFA/FFFFFF?text=Our+Story'">
                                 </div>
                             </div>
                             <div class="bg-white rounded-xl shadow-lg p-6">
-                                <h4 class="text-2xl font-bold text-violet-600 mb-2">Our Story Continues</h4>
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Our Story Continues</h4>
                                 <p class="text-gray-600">Today we celebrate the beautiful journey we've shared, but the
                                     best chapters are yet to come. I will marry you as soon as I can inshaAllah. You are
                                     the queen of my heart and soul. <b>I love you so much baby!</b></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 10 - Image Only -->
+                    <div class="flex gap-6 animate-float-up" style="animation-delay: 1.0s;">
+                        <div class="hidden md:flex md:w-1/2 justify-end"></div>
+
+                        <!-- Timeline Dot -->
+                        <div class="hidden md:flex md:w-auto md:justify-center z-50">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 border-4 border-white shadow-lg">
+                            </div>
+                        </div>
+
+                        <div class="md:w-1/2">
+                            <div class="md:hidden mb-6">
+                                <div class="bg-white rounded-xl shadow-lg overflow-hidden h-94">
+                                    <img src="Images/We10.jpg" alt="A Timeless Moment"
+                                        class="w-full h-full object-cover"
+                                        onerror="this.src='https://via.placeholder.com/600x400/93C5FD/FFFFFF?text=Moment+10'">
+                                </div>
+                            </div>
+                            <div class="md:hidden bg-white rounded-xl shadow-lg p-6">
+                                <h4 class="text-2xl font-bold text-blue-600 mb-2">Our Story Continues</h4>
+                                <p class="text-gray-600">Today we celebrate the beautiful journey we've shared, but the
+                                    best chapters are yet to come. I will marry you as soon as I can inshaAllah. You are
+                                    the queen of my heart and soul. <b>I love you so much baby!</b></p>
+                            </div>
+                            <div
+                                class="hidden md:block bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                                <img src="Images/We10.jpg" alt="A Timeless Moment" class="h-64 w-full object-cover"
+                                    onerror="this.src='https://via.placeholder.com/600x400/93C5FD/FFFFFF?text=Moment+10'">
                             </div>
                         </div>
                     </div>
@@ -708,66 +1026,37 @@
 
         <!-- Birthday Messages/Wishes Section -->
         <div class="w-full max-w-4xl mb-12" id="messages">
-            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-8 animate-slide-in">
-                Birthday Wishes for You 🎁
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-white mb-8 animate-slide-in">
+                Birthday Wishes for You
             </h3>
             <div class="space-y-4">
                 <div
-                    class="bg-gradient-to-r from-pink-100 to-purple-100 rounded-lg p-6 border-2 border-pink-300 animate-float-up">
+                    class="bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg p-6 border-2 border-blue-300 animate-float-up">
                     <p class="text-gray-800 text-lg italic mb-2">"May Allah bless you and may this year bring you
                         endless joy, incredible
                         adventures, and dreams that come true. You deserve the world pretty!"</p>
-                    <p class="text-purple-600 font-semibold">💝 With all my love</p>
+                    <p class="text-blue-600 font-semibold">With all my love</p>
                 </div>
-                <div class="bg-gradient-to-r from-blue-100 to-pink-100 rounded-lg p-6 border-2 border-blue-300 animate-float-up"
+                <div class="bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg p-6 border-2 border-blue-300 animate-float-up"
                     style="animation-delay: 0.1s;">
                     <p class="text-gray-800 text-lg italic mb-2">"Thank you for being the most amazing person in my
                         life. Your presence makes every day special, and I'm grateful for you more than words can
                         express."</p>
-                    <p class="text-blue-600 font-semibold">💙 Forever grateful</p>
+                    <p class="text-blue-600 font-semibold">Forever grateful</p>
                 </div>
-                <div class="bg-gradient-to-r from-yellow-100 to-pink-100 rounded-lg p-6 border-2 border-yellow-300 animate-float-up"
+                <div class="bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg p-6 border-2 border-blue-300 animate-float-up"
                     style="animation-delay: 0.2s;">
                     <p class="text-gray-800 text-lg italic mb-2">"Here's to celebrating YOU today! Your beauty,
-                        love, and kindness make my world full of peace. Shine bright, beautiful! 🌟"</p>
-                    <p class="text-yellow-600 font-semibold">✨ You're amazing</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Celebration Stats -->
-        <div class="w-full max-w-4xl mb-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up">
-                    <p class="text-3xl font-bold text-purple-600">∞</p>
-                    <p class="text-gray-600 font-semibold mt-2">Forever</p>
-                    <p class="text-sm text-gray-500">I'll be there for you</p>
-                </div>
-                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up"
-                    style="animation-delay: 0.1s;">
-                    <p class="text-3xl font-bold text-pink-600">💯</p>
-                    <p class="text-gray-600 font-semibold mt-2">Perfect</p>
-                    <p class="text-sm text-gray-500">Just the way you are</p>
-                </div>
-                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up"
-                    style="animation-delay: 0.2s;">
-                    <p class="text-3xl font-bold text-blue-600">🌍</p>
-                    <p class="text-gray-600 font-semibold mt-2">World</p>
-                    <p class="text-sm text-gray-500">You mean everything</p>
-                </div>
-                <div class="bg-white rounded-lg p-6 shadow-md text-center animate-float-up"
-                    style="animation-delay: 0.3s;">
-                    <p class="text-3xl font-bold text-red-600">❤️</p>
-                    <p class="text-gray-600 font-semibold mt-2">Love</p>
-                    <p class="text-sm text-gray-500">With all my heart</p>
+                        love, and kindness make my world full of peace. Shine bright, beautiful!"</p>
+                    <p class="text-blue-600 font-semibold">You're amazing</p>
                 </div>
             </div>
         </div>
 
         <!-- Comment Section -->
         <div class="w-full max-w-4xl mb-12" id="comments">
-            <h3 class="text-3xl md:text-4xl font-bold text-center text-purple-600 mb-8 animate-slide-in">
-                If you have any comment, write here. 💬
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-white mb-8 animate-slide-in">
+                If you have any comment, write here.
             </h3>
             <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6">
                 <form id="commentForm">
@@ -779,8 +1068,8 @@
                             placeholder="Share your thoughts, wishes, or love here..."></textarea>
                     </div>
                     <button type="submit"
-                        class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg text-sm sm:text-base">
-                        Post Comment ✨
+                        class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold rounded-lg hover:from-blue-600 hover:to-blue-800 transition-all shadow-lg text-sm sm:text-base">
+                        Post Comment
                     </button>
                 </form>
                 <div id="commentsList" class="mt-6 space-y-4">
@@ -791,10 +1080,10 @@
 
         <!-- Footer -->
         <div class="text-center mt-12 pb-8">
-            <p class="text-lg md:text-xl text-purple-600 font-semibold mb-2">
-                🎊 Have the most wonderful birthday ever! 🎊
+            <p class="text-lg md:text-xl text-blue-200 font-semibold mb-2">
+                Have The Most Wonderful Birthday Ever!
             </p>
-            <p class="text-gray-600">Made by your hubby on your special day</p>
+            <p class="text-white">Made by your hubby (Mahfuzur Rahman Nahid) on your special day</p>
         </div>
     </div>
 
@@ -814,7 +1103,7 @@
                 });
 
                 carouselDots.forEach((dot, i) => {
-                    dot.classList.toggle('bg-purple-600', i === index);
+                    dot.classList.toggle('bg-blue-600', i === index);
                     dot.classList.toggle('bg-gray-300', i !== index);
                 });
             }
@@ -853,10 +1142,27 @@
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        const headerOffset = 90;
+                        const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                        const offsetPosition = elementPosition - headerOffset;
+                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
                     }
                 });
             });
+
+            const navToggle = document.getElementById('navToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            if (navToggle && mobileNav) {
+                navToggle.addEventListener('click', () => {
+                    mobileNav.classList.toggle('active');
+                });
+
+                mobileNav.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileNav.classList.remove('active');
+                    });
+                });
+            }
 
             // Comment Section
             const commentForm = document.getElementById('commentForm');
@@ -942,7 +1248,7 @@
             window.editComment = function (index) {
                 editingIndex = index;
                 document.getElementById('commentText').value = comments[index].text;
-                document.querySelector('button[type="submit"]').textContent = 'Update Comment ✨';
+                document.querySelector('button[type="submit"]').textContent = 'Update Comment';
                 document.getElementById('commentText').focus();
 
                 // Scroll to form
@@ -960,7 +1266,7 @@
                         comments[editingIndex].text = commentText;
                         comments[editingIndex].date = new Date().toLocaleString() + ' (edited)';
                         editingIndex = null;
-                        document.querySelector('button[type="submit"]').textContent = 'Post Comment ✨';
+                        document.querySelector('button[type="submit"]').textContent = 'Post Comment';
                     } else {
                         // Add new comment
                         const newComment = {
